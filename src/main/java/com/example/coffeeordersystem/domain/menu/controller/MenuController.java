@@ -20,6 +20,7 @@ public class MenuController {
 
     @GetMapping
     public ApiResponse<List<MenuResponse>> getMenus() {
+        // 인증 없이 전체 메뉴 목록 조회 가능
         return ApiResponse.success(menuService.getMenus(), "메뉴 목록 조회에 성공했습니다.");
     }
 }

@@ -16,6 +16,7 @@ public class MenuService {
     }
 
     public List<MenuResponse> getMenus() {
+        // 응답 순서 고정을 위해 메뉴 ID 오름차순 조회
         return menuRepository.findAllByOrderByIdAsc()
                 .stream()
                 .map(this::toResponse)
