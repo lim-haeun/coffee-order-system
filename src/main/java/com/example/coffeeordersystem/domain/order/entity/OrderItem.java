@@ -1,6 +1,7 @@
 package com.example.coffeeordersystem.domain.order.entity;
 
 import com.example.coffeeordersystem.domain.menu.entity.Menu;
+import com.example.coffeeordersystem.global.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +13,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "order_items")
-public class OrderItem {
+public class OrderItem extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

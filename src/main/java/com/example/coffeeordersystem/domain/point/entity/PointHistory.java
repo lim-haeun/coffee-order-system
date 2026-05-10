@@ -1,6 +1,7 @@
 package com.example.coffeeordersystem.domain.point.entity;
 
 import com.example.coffeeordersystem.domain.user.entity.User;
+import com.example.coffeeordersystem.global.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,11 +12,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "point_histories")
-public class PointHistory {
+public class PointHistory extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +32,6 @@ public class PointHistory {
     @Column(nullable = false)
     private PointHistoryType type;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
     protected PointHistory() {
     }
 
@@ -42,7 +39,6 @@ public class PointHistory {
         this.user = user;
         this.amount = amount;
         this.type = type;
-        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -59,9 +55,5 @@ public class PointHistory {
 
     public PointHistoryType getType() {
         return type;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 }

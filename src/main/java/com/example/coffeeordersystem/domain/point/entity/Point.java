@@ -1,6 +1,7 @@
 package com.example.coffeeordersystem.domain.point.entity;
 
 import com.example.coffeeordersystem.domain.user.entity.User;
+import com.example.coffeeordersystem.global.common.BaseEntity;
 import com.example.coffeeordersystem.global.exception.BusinessException;
 import com.example.coffeeordersystem.global.exception.ErrorCode;
 import jakarta.persistence.Column;
@@ -14,7 +15,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "points")
-public class Point {
+public class Point extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,7 @@
 package com.example.coffeeordersystem.domain.order.entity;
 
 import com.example.coffeeordersystem.domain.user.entity.User;
+import com.example.coffeeordersystem.global.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
