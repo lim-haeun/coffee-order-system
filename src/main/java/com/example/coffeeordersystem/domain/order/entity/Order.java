@@ -39,10 +39,14 @@ public class Order {
     }
 
     public Order(User user, Long totalPrice) {
+        this(user, totalPrice, LocalDateTime.now());
+    }
+
+    public Order(User user, Long totalPrice, LocalDateTime orderedAt) {
         this.user = user;
         this.totalPrice = totalPrice;
         this.status = OrderStatus.COMPLETED;
-        this.orderedAt = LocalDateTime.now();
+        this.orderedAt = orderedAt;
     }
 
     public Long getId() {
