@@ -2,6 +2,8 @@ package com.example.coffeeordersystem.domain.point.controller;
 
 import com.example.coffeeordersystem.domain.point.repository.PointHistoryRepository;
 import com.example.coffeeordersystem.domain.point.repository.PointRepository;
+import com.example.coffeeordersystem.domain.order.repository.OrderItemRepository;
+import com.example.coffeeordersystem.domain.order.repository.OrderRepository;
 import com.example.coffeeordersystem.domain.user.entity.User;
 import com.example.coffeeordersystem.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,8 +35,16 @@ class PointControllerTest {
     @Autowired
     private PointHistoryRepository pointHistoryRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
     @BeforeEach
     void setUp() {
+        orderItemRepository.deleteAll();
+        orderRepository.deleteAll();
         pointHistoryRepository.deleteAll();
         pointRepository.deleteAll();
         userRepository.deleteAll();
@@ -42,7 +52,7 @@ class PointControllerTest {
 
     @Test
     void chargePointReturnsSuccessResponse() throws Exception {
-        User user = userRepository.save(new User("테스트 사용자"));
+        User user = userRepository.save(new User("test-user"));
 
         mockMvc.perform(post("/api/points/charge")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -64,7 +74,7 @@ class PointControllerTest {
 
     @Test
     void chargePointReturnsBadRequestWhenAmountIsZero() throws Exception {
-        User user = userRepository.save(new User("테스트 사용자"));
+        User user = userRepository.save(new User("test-user"));
 
         mockMvc.perform(post("/api/points/charge")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -91,6 +101,6 @@ class PointControllerTest {
                                 """))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.message").value("사용자를 찾을 수 없습니다."));
+                .andExpect(jsonPath("$.message").value("존재하지 않는 사용자입니다."));
     }
 }

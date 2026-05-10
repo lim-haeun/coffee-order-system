@@ -7,6 +7,8 @@ import com.example.coffeeordersystem.domain.point.entity.PointHistory;
 import com.example.coffeeordersystem.domain.point.entity.PointHistoryType;
 import com.example.coffeeordersystem.domain.point.repository.PointHistoryRepository;
 import com.example.coffeeordersystem.domain.point.repository.PointRepository;
+import com.example.coffeeordersystem.domain.order.repository.OrderItemRepository;
+import com.example.coffeeordersystem.domain.order.repository.OrderRepository;
 import com.example.coffeeordersystem.domain.user.entity.User;
 import com.example.coffeeordersystem.domain.user.repository.UserRepository;
 import com.example.coffeeordersystem.global.exception.BusinessException;
@@ -40,8 +42,16 @@ class PointServiceTest {
     @Autowired
     private PointHistoryRepository pointHistoryRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
     @BeforeEach
     void setUp() {
+        orderItemRepository.deleteAll();
+        orderRepository.deleteAll();
         pointHistoryRepository.deleteAll();
         pointRepository.deleteAll();
         userRepository.deleteAll();
@@ -49,7 +59,7 @@ class PointServiceTest {
 
     @Test
     void chargePointIncreasesBalance() {
-        User user = userRepository.save(new User("테스트 사용자"));
+        User user = userRepository.save(new User("test-user"));
         pointRepository.save(new Point(user, 5000L));
 
         PointChargeResponse response = pointService.chargePoint(new PointChargeRequest(user.getId(), 10000L));
@@ -68,7 +78,7 @@ class PointServiceTest {
 
     @Test
     void chargePointThrowsInvalidChargeAmountWhenAmountIsZeroOrLess() {
-        User user = userRepository.save(new User("테스트 사용자"));
+        User user = userRepository.save(new User("test-user"));
 
         assertThatThrownBy(() -> pointService.chargePoint(new PointChargeRequest(user.getId(), 0L)))
                 .isInstanceOfSatisfying(BusinessException.class,
@@ -77,7 +87,7 @@ class PointServiceTest {
 
     @Test
     void chargePointCreatesChargeHistory() {
-        User user = userRepository.save(new User("테스트 사용자"));
+        User user = userRepository.save(new User("test-user"));
 
         pointService.chargePoint(new PointChargeRequest(user.getId(), 10000L));
 
@@ -91,7 +101,7 @@ class PointServiceTest {
 
     @Test
     void chargePointKeepsCorrectBalanceWhenSameUserChargesConcurrently() throws Exception {
-        User user = userRepository.save(new User("테스트 사용자"));
+        User user = userRepository.save(new User("test-user"));
         pointRepository.save(new Point(user, 0L));
 
         int threadCount = 5;
