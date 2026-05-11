@@ -339,6 +339,7 @@ Optional<Point> findByUserId(Long userId);
 | 잘못된 포인트 잔액 | `INVALID_POINT_BALANCE` | 400 | 음수 잔액 Point 생성 방지 |
 | 포인트 부족 | `INSUFFICIENT_POINT` | 400 | 주문 결제 가능 잔액 부족 |
 | 잘못된 결제 금액 | `INVALID_PAYMENT_AMOUNT` | 400 | 0 이하 주문 결제 금액 |
+| 데이터 플랫폼 전송 실패 | `DATA_PLATFORM_SEND_FAILED` | 500 | 주문 데이터 수집 플랫폼 전송 실패 |
 | 잘못된 요청값 | `INVALID_REQUEST` | 400 | DTO validation 실패 |
 | 처리되지 않은 서버 오류 | `INTERNAL_SERVER_ERROR` | 500 | 알 수 없는 서버 예외 |
 
