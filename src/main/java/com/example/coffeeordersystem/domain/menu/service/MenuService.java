@@ -25,18 +25,18 @@ public class MenuService {
         this.orderItemRepository = orderItemRepository;
     }
 
+    // 메뉴 목록 조회
     public List<MenuResponse> getMenus() {
-        // 응답 순서 고정을 위해 메뉴 ID 오름차순으로 조회
         return menuRepository.findAllByOrderByIdAsc()
                 .stream()
                 .map(this::toResponse)
                 .toList();
     }
 
+    // 최근 7일 인기 메뉴 Top 3 조회
     public List<PopularMenuResponse> getPopularMenus() {
         LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
 
-        // 최근 7일 동안 완료된 주문의 OrderItem을 DB에서 집계해 상위 3개만 조회
         return orderItemRepository.findPopularMenus(
                         sevenDaysAgo,
                         OrderStatus.COMPLETED,
@@ -47,10 +47,12 @@ public class MenuService {
                 .toList();
     }
 
+    // Menu 엔티티를 메뉴 목록 응답 DTO로 변환
     private MenuResponse toResponse(Menu menu) {
         return MenuResponse.from(menu.getId(), menu.getName(), menu.getPrice());
     }
 
+    // 인기 메뉴 집계 결과를 응답 DTO로 변환
     private PopularMenuResponse toPopularMenuResponse(PopularMenuProjection projection) {
         return new PopularMenuResponse(
                 projection.getMenuId(),

@@ -19,15 +19,15 @@ public class MenuController {
         this.menuService = menuService;
     }
 
+    // 메뉴 목록 조회
     @GetMapping
     public ApiResponse<List<MenuResponse>> getMenus() {
-        // 인증 없이 전체 메뉴 목록을 조회
         return ApiResponse.success(menuService.getMenus(), "메뉴 목록 조회에 성공했습니다.");
     }
 
+    // 인기 메뉴 목록 조회
     @GetMapping("/popular")
     public ApiResponse<List<PopularMenuResponse>> getPopularMenus() {
-        // 주문 성공 내역을 기준, 최근 7일간 가장 많이 주문된 메뉴를 조회
         return ApiResponse.success(menuService.getPopularMenus(), "인기 메뉴 목록 조회에 성공했습니다.");
     }
 }

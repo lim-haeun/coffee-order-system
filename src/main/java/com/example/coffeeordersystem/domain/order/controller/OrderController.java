@@ -20,9 +20,9 @@ public class OrderController {
         this.orderService = orderService;
     }
 
+    // 주문 생성 및 결제
     @PostMapping
     public ApiResponse<OrderResponse> createOrder(@Valid @RequestBody OrderCreateRequest request) {
-        // 주문 생성과 포인트 결제를 하나의 서비스 트랜잭션에서 처리한다.
         return ApiResponse.success(orderService.createOrder(request), "주문이 완료되었습니다.");
     }
 }

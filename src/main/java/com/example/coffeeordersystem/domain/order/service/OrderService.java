@@ -52,6 +52,7 @@ public class OrderService {
         this.eventPublisher = eventPublisher;
     }
 
+    // 주문 생성 및 포인트 결제
     @Transactional
     public OrderResponse createOrder(OrderCreateRequest request) {
         User user = userRepository.findById(request.userId())
@@ -60,22 +61,21 @@ public class OrderService {
         Menu menu = menuRepository.findById(request.menuId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.MENU_NOT_FOUND));
 
-        /*
-         * 포인트 row를 비관적 락으로 조회해 같은 사용자의 동시 주문이
-         * 잔액 검증과 차감 사이를 끼어들지 못하게 한다.
-         */
+        // 포인트 row를 비관적 락으로 조회해 동시 주문 시 잔액 정합성을 보장한다.
         Point point = pointRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.POINT_NOT_FOUND));
 
         Long paymentAmount = Long.valueOf(menu.getPrice());
         point.use(paymentAmount);
 
+        // 포인트 사용 이력 저장
         pointHistoryRepository.save(new PointHistory(user, paymentAmount, PointHistoryType.USE));
 
+        // 주문 및 주문 아이템 저장
         Order order = orderRepository.save(new Order(user, paymentAmount));
         orderItemRepository.save(new OrderItem(order, menu, 1));
 
-        // 트랜잭션 커밋 이후 데이터 수집 플랫폼으로 주문 데이터를 전송한다.
+        // 트랜잭션 커밋 이후 데이터 수집 플랫폼으로 주문 데이터 전송
         eventPublisher.publishEvent(new OrderCompletedEvent(user.getId(), menu.getId(), paymentAmount));
 
         return new OrderResponse(
