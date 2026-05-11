@@ -22,6 +22,10 @@ spring:
       hibernate:
         format_sql: true
 
+  sql:
+    init:
+      encoding: UTF-8
+
 server:
   port: 8080
 
